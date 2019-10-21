@@ -12,7 +12,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 from sklearn import metrics
-
+from sklearn.metrics import normalized_mutual_info_score
 from sklearn.cluster import KMeans, MiniBatchKMeans
 
 import logging
@@ -152,6 +152,13 @@ if not opts.use_hashing:
         for ind in order_centroids[i, :10]:
             print(' %s' % terms[ind], end='')
         print()
+vectorizer2 = CountVectorizer(max_df=0.5, max_features=opts.n_features,
+                                 min_df=2, stop_words='english')
+X2 = vectorizer2.fit_transform(dataset.data)
+km2 = KMeans(n_clusters=true_k, init='k-means++', max_iter=100, n_init=1)
+km2.fit(X2)
+score = normalized_mutual_info_score(km.cluster_centers_[0], km2.cluster_centers_[0])
+
 tup = [(i[0],i[1]) for i in km.cluster_centers_]
 plt.scatter([i[0] for i in tup],[i[1] for i in tup])
 plt.title('KMeans centroid locations TF-IDF: First 2 Dimensions')
