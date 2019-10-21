@@ -1,7 +1,7 @@
 # Author: Peter Prettenhofer <peter.prettenhofer@gmail.com>
 #         Lars Buitinck
 # License: BSD 3 clause
-
+# With Changes made by Daniel Silver <Silver.Da@husky.neu.edu>
 from __future__ import print_function
 
 from sklearn.datasets import fetch_20newsgroups
@@ -22,7 +22,7 @@ from time import time
 
 import numpy as np
 
-
+from matplotlib import pyplot as plt
 # Display progress logs on stdout
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
@@ -86,7 +86,7 @@ if opts.use_hashing:
                                        non_negative=False, norm='l2',
                                        binary=False)
 else:
-    vectorizer = CountVectorizer(max_df=0.5, max_features=opts.n_features,
+    vectorizer = TfidfVectorizer(max_df=0.5, max_features=opts.n_features,
                                  min_df=2, stop_words='english')
 X = vectorizer.fit_transform(dataset.data)
 
@@ -152,3 +152,7 @@ if not opts.use_hashing:
         for ind in order_centroids[i, :10]:
             print(' %s' % terms[ind], end='')
         print()
+tup = [(i[0],i[1]) for i in km.cluster_centers_]
+plt.scatter([i[0] for i in tup],[i[1] for i in tup])
+plt.title('KMeans centroid locations TF-IDF: First 2 Dimensions')
+plt.show()
